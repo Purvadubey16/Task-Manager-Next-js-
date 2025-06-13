@@ -61,9 +61,6 @@ router.get("/me",authenticate,async(req:AuthenticatedRequest,res:Response)=>{
 //return user with all details
     res.json(user);
 })
-
-
-
 // get user details by id
 router.get('/:id',async(req: Request, res: Response)=>{
     const id = parseInt(req.params.id);
@@ -109,7 +106,14 @@ router.delete('/:id',async(req,res)=>{
 // PUT /users/:id
 router.put("/:id", async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const { name, email, password, oldPassword } = req.body;
+  const { name, email, password, oldPassword , lastname,
+    phone,
+    dob,
+    gender,
+    country,
+    state,
+    city,
+    postalCode,} = req.body;
 
   const userRepo = AppDataSource.getRepository(User);
   const user = await userRepo.findOne({ where: { id } });
@@ -134,7 +138,28 @@ router.put("/:id", async (req: Request, res: Response) => {
 
   user.name = name ?? user.name;
   user.email = email ?? user.email;
-
+  if (req.body.hasOwnProperty("lastname"))   user.lastname   = lastname;
+  if (req.body.hasOwnProperty("phone")) {
+    user.phone = phone;
+  }
+  if (req.body.hasOwnProperty("dob")) {
+    user.dob = dob;
+  }
+  if (req.body.hasOwnProperty("gender")) {
+    user.gender = gender;
+  }
+  if (req.body.hasOwnProperty("country")) {
+    user.country = country;
+  }
+  if (req.body.hasOwnProperty("state")) {
+    user.state = state;
+  }
+  if (req.body.hasOwnProperty("city")) {
+    user.city = city;
+  }
+  if (req.body.hasOwnProperty("postalCode")) {
+    user.postalCode = postalCode;
+  }
   const updatedUser = await userRepo.save(user);
 
   return res.json({
@@ -142,6 +167,14 @@ router.put("/:id", async (req: Request, res: Response) => {
     name: updatedUser.name,
     email: updatedUser.email,
     profileImageUrl: updatedUser.profileImageUrl,
+     lastname: updatedUser.lastname,
+    phone: updatedUser.phone,
+    dob: updatedUser.dob,
+    gender: updatedUser.gender,
+    country: updatedUser.country,
+    state: updatedUser.state,
+    city:updatedUser.city,
+    postalCode: updatedUser.postalCode,
   });
 });
 

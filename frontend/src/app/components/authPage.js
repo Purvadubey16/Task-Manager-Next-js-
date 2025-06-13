@@ -190,13 +190,13 @@ const validatePassword = (value) => {
 
 
 
-    <div className="w-1/2 flex items-center justify-center mt-5 ">
+    <div className="w-1/2 flex items-center justify-center  ">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md bg-white/10 backdrop-blur-lg border border-gray-200 rounded-xl shadow-xl p-4"
       >
-        <div className="pl-40 pb-3">
+        <div className="pl-40 ">
           <Image
           src={"/alitlogo.png"}
           alt="Logo"
@@ -205,7 +205,7 @@ const validatePassword = (value) => {
           ></Image>
         </div>
 
-  <h4 className="text-center text-xl pb-2">Alit Technology</h4>
+  <h4 className="text-center text-xl pb-1">Alit Technology</h4>
 
         <h2 className="text-3xl font-bold text-black text-center  drop-shadow">
           {isSignup ? "Sign Up" : "Log In"}
@@ -251,7 +251,7 @@ const validatePassword = (value) => {
   }}
    sx={{
     '& .MuiOutlinedInput-root': {
-      height: '50px',
+      height: '45px',
       fontSize: '14px',
       '& input': {
         padding: '10px 14px',
@@ -309,7 +309,7 @@ const validatePassword = (value) => {
   }}
   sx={{
     '& .MuiOutlinedInput-root': {
-      height: '50px',
+      height: '45px',
       fontSize: '14px',
       '& input': {
         padding: '10px 14px',
@@ -378,7 +378,7 @@ helperText={isSignup && error ? error : ""}
   }}
    sx={{
     '& .MuiOutlinedInput-root': {
-      height: '50px',
+      height: '45px',
       fontSize: '14px',
       '& input': {
         padding: '10px 14px',
@@ -445,7 +445,7 @@ helperText={isSignup && error ? error : ""}
   }}
    sx={{
     '& .MuiOutlinedInput-root': {
-      height: '50px',
+      height: '45px',
       fontSize: '14px',
       '& input': {
         padding: '10px 14px',
@@ -493,7 +493,7 @@ helperText={isSignup && error ? error : ""}
 
 
 {isSignup && (
-  <div className="flex flex-col">
+  <div className="flex flex-col mb-1">
     <div className="flex items-start space-x-2 mt-2">
       <div className="flex items-center h-5">
         <input
