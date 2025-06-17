@@ -2,14 +2,24 @@
 
 import React from "react";
 import Navbar from "../components/Navbar";
+import { Typography } from "@mui/material";
+import UserMenu from "../components/UserMenu";
 
 const HelpSupport = () => {
   return (
-    <div className="flex flex-col min-h-screen pl-[260px] pr-6 pt-4 text-black bg-gray-50">
-      <Navbar />
+    <div className="flex flex-col h-screen  pl-[70px] text-black" >
+      <div className=" flex justify-between bg-gray-100 pb-2.5 pt-2  pr-6 pl-3">
+          <div className="flex items-center gap-4 ">
+          <Navbar />
+            <Typography variant="h5" component="div" className="font-bold">
+                Help & Support
+              </Typography>
+          </div>
+           <UserMenu />
+      </div>
+    
 
       <div className="max-w-5xl w-full mx-auto mt-4  p-4 rounded-xl ">
-        <h1 className="text-3xl font-bold text-center mb-8 text-[#5045E5]">Help & Support</h1>
 
         {/* Getting Started */}
         <section className="mb-8">
@@ -17,7 +27,7 @@ const HelpSupport = () => {
           <p className="text-gray-700">
             To start using the Task Manager App:
           </p>
-          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
+          <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1"> 
             <li>Create an account or log in.</li>
             <li>Add tasks using the <strong>Add Task</strong> button.</li>
             <li>Set due dates, priorities, and track statuses.</li>

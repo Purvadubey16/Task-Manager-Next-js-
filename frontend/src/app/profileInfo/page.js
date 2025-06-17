@@ -45,7 +45,7 @@ const Page = () => {
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [lastname,setLastname] = useState("");
+  const [lastname, setLastname] = useState("");
 
   const fetchDetails = async () => {
     try {
@@ -59,7 +59,7 @@ const Page = () => {
       setUserDetails(data);
       setEditedName(data.name);
       setEditedEmail(data.email);
-      setLastname(data.lastname ||"" );
+      setLastname(data.lastname || "");
       setPhone(data.phone || "");
       setDob(data.dob || "");
       setGender(data.gender || "");
@@ -264,20 +264,25 @@ const Page = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col min-h-screen pl-[250px] text-black ">
-        <div className=" pt-4 flex justify-end bg-gray-100 pb-3 pr-6">
+      
+      <div className="flex flex-col min-h-screen pl-[70px] text-black ">
+        <div className="  flex justify-between bg-gray-100  pr-6 pl-6 pb-0.5">
+          <div className="flex    ">
+              <Navbar />
+              <div>
+            <p className="bg-[#EDC824] px-2 py-2 mt-3 rounded-2xl text-white mb-1">
+              Profile Information
+            </p>
+            </div>
+          </div>
+        
           <UserMenu />
         </div>
 
         <div className="p-4">
-          <div className="flex justify-between mb-4  pt-2">
-            <p className="bg-[#EDC824] px-3 py-2 mb-4 rounded-2xl text-white">
-              Profile Information
-            </p>
-          </div>
+          
 
-          <Divider></Divider>
+         
           {/* Profile Header */}
           <div className="flex items-center mb-4 gap-4 mt-3 ">
             <div
@@ -368,9 +373,8 @@ const Page = () => {
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Enter your Last name"
               value={lastname}
-              onChange={(e)=>setLastname(e.target.value)}
+              onChange={(e) => setLastname(e.target.value)}
             />
-          
           </div>
 
           <div className="flex flex-wrap gap-4 mt-2 ">
@@ -378,29 +382,28 @@ const Page = () => {
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Phone number"
               value={phone}
-              onChange={(e)=>setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
             />
-              <input
+            <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Enter your email"
               value={editedEmail}
               onChange={(e) => setEditedEmail(e.target.value)}
             />
-           
           </div>
 
           <div className="flex flex-wrap gap-4 mt-2 ">
-           <input
+            <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Date of Birth"
               value={dob}
-              onChange={(e)=>setDob(e.target.value)}
+              onChange={(e) => setDob(e.target.value)}
             />
             <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Gender"
               value={gender}
-              onChange={(e)=>setGender(e.target.value)}
+              onChange={(e) => setGender(e.target.value)}
             />
           </div>
 
@@ -413,13 +416,13 @@ const Page = () => {
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Country"
               value={country}
-              onChange={(e)=>setCountry(e.target.value)}
+              onChange={(e) => setCountry(e.target.value)}
             />
             <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="State"
-                value={state}
-              onChange={(e)=>setState(e.target.value)}
+              value={state}
+              onChange={(e) => setState(e.target.value)}
             />
           </div>
 
@@ -427,14 +430,14 @@ const Page = () => {
             <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="City"
-                value={city}
-              onChange={(e)=>setCity(e.target.value)}
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
             />
             <input
               className="border flex-1 p-2 rounded border-gray-400"
               placeholder="Postal Code"
               value={postalCode}
-              onChange={(e)=>setPostalCode(e.target.value)}
+              onChange={(e) => setPostalCode(e.target.value)}
             />
           </div>
 

@@ -15,7 +15,6 @@ import {
   Button,
 } from "@mui/material";
 
-
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -25,42 +24,43 @@ export default function ForgotPasswordPage() {
 
   const router = useRouter();
 
-const handleForgotPassword = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
-  setSuccess(false);
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
 
-  try {
-    const response = await fetch("http://localhost:3000/user/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const response = await fetch(
+        "http://localhost:3000/user/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.message || "Something went wrong");
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      setSuccess(true);
+      setOpenDialog(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    setSuccess(true);
-    setOpenDialog(true);
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+  };
 
   return (
     <div className="flex h-screen">
       {/* Left Side Image */}
-     
+
       {/* Form Section */}
       <div className="w-1/2 flex items-center justify-center ">
         <motion.div
@@ -76,7 +76,8 @@ const handleForgotPassword = async (e) => {
             Forgot Password?
           </h2>
           <p className="text-center text-gray-500 text-sm mb-3 px-4">
-            Enter your email address and we will send you a link to reset your password
+            Enter your email address and we will send you a link to reset your
+            password
           </p>
 
           <form onSubmit={handleForgotPassword} className="space-y-6">
@@ -86,7 +87,9 @@ const handleForgotPassword = async (e) => {
               type="email"
               margin="dense"
               label={
-                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                <span
+                  style={{ display: "flex", alignItems: "center", gap: "4px" }}
+                >
                   <EmailIcon fontSize="small" />
                   Email
                 </span>
@@ -100,7 +103,7 @@ const handleForgotPassword = async (e) => {
                 sx: { color: "black" },
               }}
               InputLabelProps={{
-                required:false,
+                required: false,
                 sx: {
                   fontSize: "13px",
                   color: "rgba(107, 114, 128, 1)",
@@ -158,62 +161,61 @@ const handleForgotPassword = async (e) => {
         </motion.div>
       </div>
 
-       <div className="w-1/2 flex justify-center items-center h-[400px] pt-60 ">
+      <div className="w-1/2 flex justify-center items-center h-[400px] pt-60 ">
         <Image
-         src="/Forgotpassword.png"
+          src="/Forgotpassword.png"
           alt="Forgot Illustration"
           width={500}
           height={300}
           className="object-contain"
         />
       </div>
-     <Dialog
-  open={openDialog}
-  onClose={() => setOpenDialog(false)}
-  PaperProps={{
-    style: {
-      padding: "20px",
-      borderRadius: "20px",
-      textAlign: "center",
-    },
-  }}
->
-  {/* Top Image */}
-  <div className="flex justify-center pt-4">
-    <Image src="/arrow.png" alt="Mail Sent" width={400} height={100} />
-  </div>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        PaperProps={{
+          style: {
+            padding: "20px",
+            borderRadius: "20px",
+            textAlign: "center",
+          },
+        }}
+      >
+        {/* Top Image */}
+        <div className="flex justify-center pt-4">
+          <Image src="/arrow.png" alt="Mail Sent" width={400} height={100} />
+        </div>
 
-  <DialogTitle className="font-bold text-lg pt-2">
-    Password Reset Link Sent
-  </DialogTitle>
+        <DialogTitle className="font-bold text-lg pt-2">
+          Password Reset Link Sent
+        </DialogTitle>
 
-  <DialogContent>
-    <DialogContentText className="text-sm text-gray-600">
-      Please check your email inbox for the password reset link.
-    </DialogContentText>
-  </DialogContent>
+        <DialogContent>
+          <DialogContentText className="text-sm text-gray-600">
+            Please check your email inbox for the password reset link.
+          </DialogContentText>
+        </DialogContent>
 
-  {/* Divider */}
-  <Divider className="mt-4" />
+        {/* Divider */}
+        <Divider className="mt-4" />
 
-  {/* Centered OK Button */}
-  <DialogActions  sx={{
-    display: "flex",
-    justifyContent: "center",
-  }}>
-    <Button
-      onClick={() => setOpenDialog(false)}
-      autoFocus
-      variant="text"
-      sx={{ borderRadius: "8px", paddingX: 4,  color: "black" }}
-    >
-      Okay
-    </Button>
-  </DialogActions>
-</Dialog>
-
-
-
+        {/* Centered OK Button */}
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Button
+            onClick={() => setOpenDialog(false)}
+            autoFocus
+            variant="text"
+            sx={{ borderRadius: "8px", paddingX: 4, color: "black" }}
+          >
+            Okay
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

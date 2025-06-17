@@ -7,6 +7,7 @@ import {
   IconButton,
   Divider,
   Box,
+  Tooltip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PersonIcon from "@mui/icons-material/Person";
@@ -88,7 +89,9 @@ useEffect(() => {
         aria-haspopup="true"
         sx={{ padding: 0 }}
       >
+        <Tooltip title="Account settings">
         <ExpandMoreIcon />
+        </Tooltip>
       </IconButton>
 
       <Menu

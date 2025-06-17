@@ -10,25 +10,26 @@ import { useRouter } from "next/navigation";
 const Page = () => {
   const router = useRouter();
 
-const start=()=>{
+  const start = () => {
     router.push("/dashboard");
-}
+  };
 
   return (
-    <div className="flex flex-col h-screen pl-[250px]  text-black">
+    <div className="flex flex-col h-screen pl-[70px] text-black">
       {/* Top Right User Menu */}
-      <div className="pt-4 flex justify-end  pb-3 pr-6 shadow-sm bg-gray-100">
-        <UserMenu />
-      </div>
-
-      {/* Top Navbar */}
-      <div className="sticky top-0 z-30 pt-2 bg-gray-50/100  px-6 ">
-        <div className="flex items-center gap-4 mb-4">
+      <div className="pt-2 pb-2.5 flex justify-between  pl-2 pr-6 shadow-sm bg-gray-100">
+         <div className="flex  items-center gap-4 ">
           <Navbar />
           <Typography variant="h5" className="font-bold">
             Home
           </Typography>
         </div>
+        <UserMenu />
+      </div>
+
+      {/* Top Navbar */}
+      <div className="sticky top-0 z-30 pt-2 bg-gray-50/100  px-6 ">
+       
       </div>
 
       {/* Welcome Section */}
@@ -41,15 +42,16 @@ const start=()=>{
             Welcome to Your Task Manager!
           </Typography>
           <p className="text-gray-600 text-md mb-6">
-            Organize, prioritize, and stay productive. Let’s help you get things done effortlessly.
+            Organize, prioritize, and stay productive. Let’s help you get things
+            done effortlessly.
           </p>
           <Button
             variant="contained"
             style={{ backgroundColor: "#EDC824" }}
             size="large"
             className="rounded-full px-6"
-            onClick={start}>
-          
+            onClick={start}
+          >
             Get Started
           </Button>
         </div>

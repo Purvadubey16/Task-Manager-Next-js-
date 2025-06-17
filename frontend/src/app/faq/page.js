@@ -54,11 +54,18 @@ const FAQPage = () => {
       </div>
 
       <div className="max-w-4xl mx-auto mt-6">
-        <h1 className="text-3xl font-bold text-center mb-6">❓ Frequently Asked Questions</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">
+          ❓ Frequently Asked Questions
+        </h1>
         <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <div key={index} className="border border-gray-300 rounded-xl p-4 hover:shadow-md transition">
-              <h3 className="text-lg font-semibold text-blue-700 mb-2">{faq.question}</h3>
+            <div
+              key={index}
+              className="border border-gray-300 rounded-xl p-4 hover:shadow-md transition"
+            >
+              <h3 className="text-lg font-semibold text-blue-700 mb-2">
+                {faq.question}
+              </h3>
               <p className="text-gray-700">{faq.answer}</p>
             </div>
           ))}
