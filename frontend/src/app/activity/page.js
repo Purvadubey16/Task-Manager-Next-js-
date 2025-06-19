@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { CircularProgress, Toolbar, Typography } from "@mui/material";
 import { PieChart } from "@mui/x-charts";
 const Page = () => {

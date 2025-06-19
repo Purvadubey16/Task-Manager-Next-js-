@@ -32,7 +32,7 @@ router.post("/register",async(req,res)=>{
 
 //check if user already exists
 const existingUser = await userRepo.findOne({where:{email}});
-if(existingUser){
+if(existingUser){ 
     return res.status(400).json({message:"User already exists"});
 }
 
@@ -72,7 +72,7 @@ router.get('/:id',async(req: Request, res: Response)=>{
 
 //login user with email and password
 router.post("/login",async(req,res)=>{
-    const {name,email,password} = req.body;
+    const {email,password} = req.body;
     const userRepo = AppDataSource.getRepository(User);
     //check wheather user with email exists
     const user = await userRepo.findOne({where:{email}});
@@ -85,7 +85,18 @@ router.post("/login",async(req,res)=>{
         return res.status(401).json({message:"Invalid email or password"});
     }
     const token = generateToken({id:user.id,email:user.email})
-   return res.status(200).json({name,email,token})
+   
+  return res.status(200).json({
+    
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+     
+    },
+    token,
+  });
+
 })
 
 //delete user by id

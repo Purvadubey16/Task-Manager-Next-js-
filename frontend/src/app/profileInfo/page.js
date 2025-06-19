@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
+import { updateUser ,getUserDetails,uploadProfile} from "../../services/UserService";
 import {
   Button,
   Divider,
@@ -15,8 +16,8 @@ import {
 } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Navbar from "../components/Navbar";
-import UserMenu from "../components/UserMenu";
+import Navbar from "../../components/Navbar";
+import UserMenu from "../../components/UserMenu";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Page = () => {
@@ -49,13 +50,8 @@ const Page = () => {
 
   const fetchDetails = async () => {
     try {
-      const token = localStorage.getItem("authToken");
-      if (!token) return;
-      const res = await fetch("http://localhost:3000/user/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch user details");
-      const data = await res.json();
+       const response = await getUserDetails(); // Axios response
+       const data = response.data;
       setUserDetails(data);
       setEditedName(data.name);
       setEditedEmail(data.email);
@@ -81,26 +77,14 @@ const Page = () => {
     if (!selectedFile) return;
 
     setFile(selectedFile);
-    setPreviewUrl(URL.createObjectURL(selectedFile)); // Optional preview
-
+    setPreviewUrl(URL.createObjectURL(selectedFile));
     const formData = new FormData();
     formData.append("profileImage", selectedFile);
     setUploading(true);
+
+
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch("http://localhost:3000/user/upload-profile", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || "Image upload failed");
-      }
-
+  await uploadProfile(formData)
       setSnackbarMessage("Profile image uploaded successfully!");
       setSnackbarSeverity("success");
       setSnackbarOpen(true);
@@ -183,35 +167,24 @@ const Page = () => {
       }
     }
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`http://localhost:3000/user/${userDetails.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: editedName,
-          email: editedEmail,
-          lastname: lastname || null,
-          phone: phone || null,
-          dob: dob || null,
-          gender: gender || null,
-          country: country || null,
-          state: state || null,
-          city: city || null,
-          postalCode: postalCode || null,
+      const payload = {
+      name: editedName,
+      email: editedEmail,
+      lastname: lastname || null,
+      phone: phone || null,
+      dob: dob || null,
+      gender: gender || null,
+      country: country || null,
+      state: state || null,
+      city: city || null,
+      postalCode: postalCode || null,
+      ...(changePassword && {
+        oldPassword: currentPassword,
+        password: newPassword,
+      }),
+    };
 
-          ...(changePassword && {
-            oldPassword: currentPassword,
-            password: newPassword,
-          }),
-        }),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Update failed");
-      }
+    await updateUser(userDetails.id, payload);
 
       setSnackbarMessage("Profile updated successfully!");
       setSnackbarSeverity("success");
@@ -333,7 +306,7 @@ const Page = () => {
       )} */}
 
           {/* Delete Button */}
-          {userDetails?.profileImageUrl && (
+          {/* {userDetails?.profileImageUrl && (
             <Button
               variant="outlined"
               startIcon={<DeleteIcon />}
@@ -353,7 +326,7 @@ const Page = () => {
             >
               Delete Profile Image
             </Button>
-          )}
+          )} */}
 
           <Divider />
 

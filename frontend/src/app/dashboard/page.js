@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { LayoutGrid, Table } from "lucide-react";
-import TaskForm from "../components/TaskFrom";
+import { getTasks ,addTask , updateTask,deleteTask} from "@/services/TaskService";
+import TaskForm from "../../components/TaskFrom";
 import {
   Button,
   Dialog,
@@ -18,18 +18,18 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import TaskListView from "../components/TaskListView";
-import TaskGridView from "../components/TaskGridView";
+import TaskListView from "../../components/TaskListView";
+import TaskGridView from "../../components/TaskGridView";
 import CircularProgress from "@mui/material/CircularProgress";
-import DeleteConfirmation from "../components/DeleteConfirmation";
-import Navbar from "../components/Navbar";
+import DeleteConfirmation from "../../components/DeleteConfirmation";
+import Navbar from "../../components/Navbar";
 import { useRouter } from "next/navigation";
-import UserMenu from "../components/UserMenu";
+import UserMenu from "../../components/UserMenu";
 import ListIcon from "@mui/icons-material/List";
 import WindowIcon from "@mui/icons-material/Window";
 import IosShareIcon from '@mui/icons-material/IosShare';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { exportTasksToExcel } from "../utils/exportToExcel";
+import { exportTasksToExcel } from "../../utils/exportToExcel";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -52,18 +52,11 @@ const Page = () => {
 
   const fetchTasks = async () => {
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch("http://localhost:3000/task/all", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) throw new Error("Failed to fetch tasks");
-      const data = await res.json();
-      setTasks(data.task);
-    } catch (error) {
-      console.error(error);
-      setError(error.message);
+       const res = await getTasks();
+       setTasks(res.data.task);  
+    }   catch (error) {
+      console.error("Error fetching tasks:", error);
+      setError(error?.response?.data?.message || "Failed to fetch tasks");
     } finally {
       setLoading(false);
     }
@@ -155,19 +148,9 @@ const Page = () => {
 
   const handleAddTask = async (task) => {
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch("http://localhost:3000/task", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(task),
-      });
-
-      if (!res.ok) throw new Error("Failed to add task");
+     await addTask(task);
     } catch (error) {
-      console.error("Add failed:", error);
+     console.error("Add failed:", error?.response?.data?.message || error.message);
     }
   };
 
@@ -178,22 +161,11 @@ const Page = () => {
     }
 
     try {
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`http://localhost:3000/task/${updatedTask.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedTask),
-      });
-
-      if (!res.ok) throw new Error("Failed to update task");
-
-      // await fetchTasks(); // Refresh tasks after successful update
-    } catch (error) {
-      console.error("Update failed:", error);
-    }
+    await updateTask(updatedTask.id, updatedTask);
+    // Optionally show success message/toast
+  } catch (error) {
+    console.error("Update failed:", error?.response?.data?.message || error.message);
+  }
   };
 
   const handleEditClick = (task) => {
@@ -208,20 +180,14 @@ const Page = () => {
 
   const handleDelete = async (id) => {
     try {
-      if (!id) {
-        console.error("Invalid ID to delete:", id);
-        return;
-      }
-      const token = localStorage.getItem("authToken");
-      const res = await fetch(`http://localhost:3000/task/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) throw new Error("Failed to delete task");
+       if (!id) {
+      console.error("Invalid ID to delete:", id);
+      return;
+    }
 
-      await fetchTasks();
+    await deleteTask(id); //using  service
+    await fetchTasks();   // Refresh task list
+    console.log("Task deleted successfully");
     } catch (error) {
       console.error("Delete failed:", error);
     }
@@ -287,8 +253,8 @@ const Page = () => {
               type="text"
               name="search"
               id="search"
-              placeholder="Search tasks ..."
-              className="w-full   p-2  rounded-xl bg-white/10 text-black border  border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400"
+              placeholder="Search task"
+              className="w-full   p-2  rounded-xl bg-white/10 text-black border  border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 text-[12px] h-[38px]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             /></Tooltip>
@@ -322,10 +288,10 @@ const Page = () => {
                   }
       `}
                 >
-                  <span className="bg-white text-black rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold">
+                  <span className="bg-white text-black rounded-full w-5 h-5 flex items-center justify-center text-[12px] font-semibold">
                     {getStatusCount(status)}
                   </span>
-                  <span>{status}</span>
+                  <span className="text-[12px]">{status}</span>
                 </button>
                 </Tooltip>
               );
@@ -343,18 +309,19 @@ const Page = () => {
                   onChange={(e) => setSortOrder(e.target.value)}
                   sx={{
                     color: "black",
-                    borderRadius: 1,
-                    height: "40px",
+                    borderRadius: 2,
+                    height: "38px",
                     minWidth: "150px",
-                    backgroundColor: "white",
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "gray" },
-                      "&.Mui-focused fieldset": { borderColor: "gray" },
-                    },
+                    // backgroundColor: "white",
+                    // "& .MuiOutlinedInput-root": {
+                    //   "& fieldset": { borderColor: "white" },
+                    //   "&:hover fieldset": { borderColor: "gray" },
+                    //   "&.Mui-focused fieldset": { borderColor: "gray" },
+                    // },
                   }}
+                  style={{ boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)" ,fontSize:"10px" }}
                 >
-                  <MenuItem value="newest">Newest First</MenuItem>
+                  <MenuItem value="newest" >Newest First</MenuItem>
                   <MenuItem value="oldest">Oldest First</MenuItem>
                 </Select>
                 </Tooltip>
@@ -362,7 +329,7 @@ const Page = () => {
 
 
               {/* views (card , list, grid) */}
-              <div className="flex rounded-xl border border-gray-300 overflow-hidden shadow-sm h-10">
+              <div className="flex rounded  overflow-hidden shadow-sm h-[38px]"   style={{ boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)" }}>
                 <Tooltip title="View as card" arrow placement="top">
                   <button
                     onClick={() => setView("grid")}
@@ -373,7 +340,7 @@ const Page = () => {
                     }`}
                     aria-label="Grid View"
                   >
-                    <WindowIcon size={10} />
+                    <WindowIcon fontSize="16px" />
                   </button>
                 </Tooltip>
                 <Tooltip title="View as List" arrow placement="top">
@@ -386,7 +353,7 @@ const Page = () => {
                     }`}
                     aria-label="Table View"
                   >
-                    <ListIcon size={20} />
+                    <ListIcon fontSize="16px" />
                   </button>
                 </Tooltip>
               </div>
@@ -395,10 +362,10 @@ const Page = () => {
              {/* export button */}
               <div>
                 <Tooltip title="Export Tasks" arrow>
-                <button className="border border-gray-300   rounded h-9 w-24" onClick={handleExport}>
+                <button className="  rounded h-9 w-24" onClick={handleExport}   style={{ boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)" }}>
                  <span style={{ alignItems: "center" }}> 
-                  <IosShareIcon style={{ marginTop: "-5px", fontSize: 18 ,marginRight:'3px'}}  /></span>
-                  <span style={{ lineHeight: 1 }} className="text-[15px]">
+                  <IosShareIcon style={{ marginTop: "-5px", fontSize: 18 ,marginRight:'5px'}}  /></span>
+                  <span style={{ lineHeight: 1 }} className="text-[10px]">
                   Export</span>
                 </button>
                 </Tooltip>

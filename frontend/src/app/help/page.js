@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { Typography } from "@mui/material";
-import UserMenu from "../components/UserMenu";
+import UserMenu from "../../components/UserMenu";
 
 const HelpSupport = () => {
   return (

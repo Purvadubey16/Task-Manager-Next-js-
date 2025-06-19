@@ -9,6 +9,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
 import { InputAdornment, IconButton } from "@mui/material";
 import Image from "next/image";
+import { login, register } from "../services/UserService";
+
 
 export default function AuthPage() {
   const [isSignup, setIsSignup] = useState(false);
@@ -17,19 +19,18 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [formErrors, setFormErrors] = useState({
-    terms: "",
-    password: "",
-    confirmPassword: "",
-    general: "",
-  });
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+    const [formErrors, setFormErrors] = useState({
+    terms: "",
+    password: "",
+    confirmPassword: "",
+    general: "",
+  });
   const router = useRouter();
 
   const toggleForm = () => {
@@ -111,33 +112,25 @@ export default function AuthPage() {
         return;
       }
     }
-    const url = isSignup
-      ? "http://localhost:3000/user/register"
-      : "http://localhost:3000/user/login";
 
-    const payload = isSignup ? { name, email, password } : { email, password };
 
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+    let response;
+    if (isSignup) {
+      response = await register({ name, email, password });
+      // Signup success
+      setIsSignup(false);
+      setName("");
+      setEmail("");
+      setPassword("");
+      setLoading(false);
+    } else {
+      response = await login({ email, password });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Something went wrong");
-        setLoading(false);
-        return;
+      if (response.data.token) {
+        localStorage.setItem("authToken", response.data.token);
       }
 
-      if (!isSignup) {
-        if (data.token) {
-          localStorage.setItem("authToken", data.token);
-        }
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberedPassword", password);
@@ -146,18 +139,15 @@ export default function AuthPage() {
           localStorage.removeItem("rememberedPassword");
         }
         router.push("/dashboard");
-      } else {
-        // Signup success: switch to login form
-        setIsSignup(false);
-        setName("");
-        setEmail("");
-        setPassword("");
-        setLoading(false);
+      
       }
     } catch (error) {
-      alert("Network error, please try again later.");
-      setLoading(false);
-      console.error("Login/Register error:", error);
+      const status = error?.response?.status;
+  const message = error?.response?.data?.message || "Network error, please try again later.";
+
+  console.error("Error Status:", status);
+  alert(message);
+  setLoading(false);
     }
   };
 
@@ -192,7 +182,8 @@ export default function AuthPage() {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md bg-white/10 backdrop-blur-lg border border-gray-200 rounded-xl shadow-xl p-4"
+          className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-xl  p-4"
+          style={{ boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)" }}
         >
           <div className="flex items-center justify-center ">
             <Image
@@ -360,10 +351,23 @@ export default function AuthPage() {
               fullWidth
               variant="outlined"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+               onChange={(e) => {
+    const value = e.target.value;
+    setPassword(value);
+
+    // Clear error if password becomes valid while typing
+    if (isSignup) {
+      const regex = /^(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/;
+      if (regex.test(value)) {
+        setFormErrors((prev) => ({ ...prev, password: "" }));
+      }
+    }
+  }}
+
+              
               required
-              error={isSignup && !!error}
-              helperText={isSignup && error ? error : ""}
+               error={isSignup && !!formErrors.password}
+               helperText={isSignup && formErrors.password}
               InputProps={{
                 sx: {
                   color: "black",
@@ -660,3 +664,6 @@ export default function AuthPage() {
     </div>
   );
 }
+
+
+

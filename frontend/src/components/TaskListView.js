@@ -476,4 +476,4 @@ const TaskListView = ({ tasks, onEdit, onDelete }) => {
   );
 };
 
-export default TaskListView;
+export default React.memo(TaskListView);

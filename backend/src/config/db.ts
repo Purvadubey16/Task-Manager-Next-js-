@@ -2,11 +2,11 @@ import { DataSource } from "typeorm";
 
 const AppDataSource = new DataSource({
     type: "postgres",
-    host:"localhost",
+    host:process.env.DB_HOST,
     port: 5432,
     username: "postgres",
     password: "postgres",
-    database:"typeorm",
+    database:process.env.DB_NAME,
     entities:["src/entities/*{.ts,.js}"],
     synchronize:true,
     logging: true,
@@ -17,3 +17,4 @@ AppDataSource.initialize().then(()=>{
 }).catch((err)=>console.log("not connected to db",err))
 
 export default AppDataSource;
+

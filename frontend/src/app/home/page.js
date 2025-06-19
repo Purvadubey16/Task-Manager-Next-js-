@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import UserMenu from "../components/UserMenu";
-import Navbar from "../components/Navbar";
+import UserMenu from "../../components/UserMenu";
+import Navbar from "../../components/Navbar";
 import { Typography, Button } from "@mui/material";
 import EmojiObjectsIcon from "@mui/icons-material/EmojiObjects";
 import { useRouter } from "next/navigation";

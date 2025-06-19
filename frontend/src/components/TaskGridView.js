@@ -69,14 +69,17 @@ const priorityBoxClasses = (index, priority) => {
 
         <div
           key={task.id}
-          className={`bg-white/10 rounded-lg p-2 shadow-sm border border-gray-400/20 border-l-8 
+          className={`bg-white/10 rounded-3xl p-2  border-l-8 
             ${statusColorMap[task.status] || "border-l-gray-300"} 
             flex flex-col justify-between text-sm`}
+            style={{ boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)" }}
+
         >
           <div className="pb-2">
 
-            <div className="flex items-center justify-between">
-            <h3 className=" font-semibold mb-1 text-[12px]">{task.title}</h3>
+            <div className="flex items-center justify-between mt-2">
+            <h3 className="font-semibold mb-1 text-[12px] max-w-xs truncate">{task.title}</h3>
+
  
 
   {/* Priority Progress Boxes */}
@@ -112,35 +115,37 @@ const priorityBoxClasses = (index, priority) => {
 
 
             <div className="flex justify-between ">
-              <div className="mb-2 py-2 px-1 border border-gray-300 rounded-xl w-24">
-                <h6 className="text-[#5045E5] text-[11px]">Created Date</h6>
+              <div className="mb-2 py-2 px-1 border border-gray-300 rounded-xl w-20 h-12">
+                <h6 className="text-[#5045E5] text-[7px]">Created Date</h6>
                 <div className="flex justify-start items-center">
                   {/* <p className="text-xl font-bold"></p> */}
                   <strong>
-                    <CalendarMonthIcon />
+                     <CalendarMonthIcon style={{fontSize:"16px",marginTop:'-8px'}}/>
                   </strong>{" "}
                   {/* {new Date(task.created).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   })} */}
-                  <div className="text-[18px] font-bold ">
+                    <div className="text-[11px] font-bold text-right ">
                     {formatDate(task.created)}
                   </div>
                 </div>
               </div>
-              <div className="mb-2 py-2 px-1 border border-gray-300 rounded-xl w-24">
-                <h6 className="text-[#5045E5] text-right text-[11px]">Due Date</h6>
-                <div className="flex justify-start items-center">
+
+
+                       <div className="mb-2 py-2 px-1 border border-gray-300 rounded-xl w-20 h-12">
+                <h6 className="text-[#5045E5] text-right text-[7px]">Due Date</h6>
+                <div className="flex justify-end items-center">
                   <strong>
-                    <CalendarMonthIcon />
+                    <CalendarMonthIcon style={{fontSize:"16",marginTop:'-8px'}}/>
                   </strong>{" "}
                   {/* {new Date(task.deadline).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   })} */}
-                  <div className="text-[18px] font-bold text-right">
+                  <div className="text-[11px] font-bold text-right ">
                     {formatDate(task.deadline)}
                   </div>
                 </div>
@@ -148,10 +153,10 @@ const priorityBoxClasses = (index, priority) => {
             </div>
 {/* gap-2 lg:gap-6 sm:gap-20 md:gap-14 */}
             <div className="flex justify-between">
-              <div className=" p-2 border border-gray-300 rounded-xl w-24">
-                <h6 className="text-[#5045E5] text-[11px]">Priority</h6>
+              <div className=" p-2 border border-gray-300 rounded-xl w-20 h-12">
+                <h6 className="text-[#5045E5] text-[7px]">Priority</h6>
                 <span
-                  className={`inline-block px-2 py-1 rounded-full text-md font-medium ${
+                  className={`inline-block px-2 py-1 rounded-full text-[10px] font-medium ${
                     task.priority === "Low"
                       ? "bg-[#CAE7CB] text-[#4CAF50]"
                       : task.priority === "Medium"
@@ -163,9 +168,9 @@ const priorityBoxClasses = (index, priority) => {
                 </span>
               </div>
 
-              <div className=" p-2 border border-gray-300 rounded-xl w-24">
-                <h6 className="text-[#5045E5] text-right text-[11px]">Status</h6>
-                <p className="text-sm  mb-1 text-right font-bold">{task.status}</p>
+              <div className=" p-2 border border-gray-300 rounded-xl w-20 h-12">
+                <h6 className="text-[#5045E5] text-right text-[7px]">Status</h6>
+                <p className="text-[10px]  mb-1 text-right font-bold">{task.status}</p>
               </div>
             </div>
           </div>
@@ -176,8 +181,10 @@ const priorityBoxClasses = (index, priority) => {
             <div className="mt-2">
               <h6>
                 {" "}
-                <span className="text-[#5045E5]">Assign By </span>{" "}
+                <span className="text-[#5045E5] text-[11px]">Assign By </span>{" "}
+                <span className="text-[11px]">
                 {task.assign}
+                </span>
               </h6>
             </div>
             <div className="flex justify-end gap-2">
@@ -189,7 +196,7 @@ const priorityBoxClasses = (index, priority) => {
                   aria-label="edit task"
                   onClick={() => onEdit(task)} // call onEdit with the whole task
                 >
-                  <EditSquareIcon fontSize="small" />
+                  <EditSquareIcon fontSize="16px" />
                 </IconButton>
               </Tooltip>
              </div>
@@ -202,7 +209,7 @@ const priorityBoxClasses = (index, priority) => {
                   aria-label="delete task"
                   onClick={() => onDelete(task.id)}
                 >
-                  <DeleteIcon fontSize="small" />
+                  <DeleteIcon  style={{fontSize:'16px'}} />
                 </IconButton>
               </Tooltip>
               </div>
@@ -262,4 +269,5 @@ const priorityBoxClasses = (index, priority) => {
   );
 };
 
-export default TaskGridView;
+export default React.memo(TaskGridView);
+

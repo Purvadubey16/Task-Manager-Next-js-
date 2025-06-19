@@ -1,5 +1,5 @@
 
-import AuthPage from "./components/authPage";
+import AuthPage from "../components/authPage";
 
 
  // Needed if using App Router
